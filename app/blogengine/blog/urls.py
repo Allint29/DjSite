@@ -17,9 +17,14 @@ Including another URLconf
 from django.urls import path
 
 #точка указывает что модуль находится в той же папке
-from .views import post_list
+from .views import post_list, PostDetail, tags_list, TagDetail #post_detail, tag_detail
+
 
 urlpatterns = [
-
-    path('', post_list)
+    #третий параметр нужен для именования данной ссылки 
+    #- в html мы можем теперь ссылаться на нее {% url 'posts_list_url' %}
+    path('', post_list, name='posts_list_url'),
+    path('post/<str:slug>/', PostDetail.as_view(), name='post_detail_url'),
+    path('tags/', tags_list, name='tags_list_url'),
+    path('tag/<str:slug>/', TagDetail.as_view(), name='tag_detail_url'),
 ]
