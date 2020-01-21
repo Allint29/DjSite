@@ -1,15 +1,13 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
 from django.views.generic import View
 
 #from django.http import HttpResponse
 
 from .models import Post, Tag
-from .utils import ObjectDetailMixin, ObjectCreateMixin, \
-    ObjectUpdateMixin, ObjDeleteMixin
-from .forms import TagForm, PostForm
+from .utils import ObjectDetailMixin
+from .forms import TagForm 
 
 # Create your views here.
 def post_list(request):
@@ -78,62 +76,20 @@ class TagDetail(ObjectDetailMixin, View):
     #    context = {'tag': tag}
     #    return render(request, 'blog/tag_detail.html', context)
 
-class TagCreate(ObjectCreateMixin, View):
-    model_form = TagForm
-    template = 'blog/tag_create.html'
-    #def get(self, request):
-    #    form = TagForm()
-    #    context = { 'form': form}
-    #    return render(request, 'blog/tag_create.html', context)
+class TagCreate(View):
+    def get(self, request):
+        form = TagForm()
+        context = { 'form': form}
+        return render(request, 'blog/tag_create.html', context)
     
-    #def post(self, request):
+    def post(self, request):
 
-    #    bound_form = TagForm(request.POST)
+        bound_form = TagForm(request.POST)
 
-    #    if bound_form.is_valid():
-    #        new_tag = bound_form.save()
-    #        #redirect может принимать url шаблон, объект класса вьюхи и еще т.д.
-    #        return redirect(new_tag) 
+        if bound_form.is_valid():
+            new_tag = bound_form.save()
+            #redirect может принимать url шаблон, объект класса вьюхи и еще т.д.
+            return redirect(new_tag) 
 
-    #    context = { 'form': bound_form }
-    #    return render(request, 'blog/tag_create.html', context)
-
-class PostCreate(ObjectCreateMixin, View):
-    model_form = PostForm
-    template = 'blog/post_create_form.html'
-    #def get(self, request):
-    #    form = PostForm()
-    #    context = { 'form': form }
-    #    return render(request, 'blog/post_create_form.html', context)
-
-    #def post(self, request):
-    #    bound_form = PostForm(request.POST)
-    #    if bound_form.is_valid():
-    #        new_post = bound_form.save()
-    #        return redirect(new_post)
-    #    context = { 'form': bound_form }
-    #    return render(request, 'blog/post_create_form.html', context)
-
-
-class TagUpdate(ObjectUpdateMixin, View):
-    model=Tag
-    model_form = TagForm
-    template = 'blog/tag_update_form.html'
-
-class PostUpdate(ObjectUpdateMixin, View):
-    model = Post
-    model_form = PostForm
-    template = 'blog/post_update_form.html'
-
-#удаление
-class PostDelete(ObjDeleteMixin, View):
-        model = Post        
-        template = 'blog/post_delete_form.html'
-        redirect_url = 'posts_list_url'
-
-class TagDelete(ObjDeleteMixin, View):
-        model = Tag        
-        template = 'blog/tag_delete_form.html'
-        redirect_url = 'tags_list_url'
-
-
+        context = { 'form': bound_form }
+        return render(request, 'blog/tag_create.html', context)
