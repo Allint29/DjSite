@@ -63,6 +63,11 @@ class Post(models.Model):
     def __str__(self):
         return 'Post: {}'.format(self.title)
 
+    class Meta:
+        #сортировка в обратном порядке
+        ordering = ['-date_pub']
+
+
 class Tag(models.Model):
     title = models.CharField(max_length=50)
     slug = models.SlugField(max_length=150, unique=True)
@@ -95,3 +100,6 @@ class Tag(models.Model):
     def __str__(self):
         return 'Tag: {}'.format(self.title)
 
+    class Meta:
+        # в алфовитном порядке сортировка
+        ordering = ['title']

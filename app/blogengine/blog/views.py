@@ -5,22 +5,59 @@ from django.urls import reverse
 from django.views.generic import View
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.core.paginator import Paginator
 #from django.http import HttpResponse
 
 from .models import Post, Tag
 from .utils import ObjectDetailMixin, ObjectCreateMixin, \
-    ObjectUpdateMixin, ObjDeleteMixin
+    ObjectUpdateMixin, ObjDeleteMixin, ObjListMixin
 from .forms import TagForm, PostForm
 
 # Create your views here.
-def post_list(request):
-    n = 'Alex'
-    posts = Post.objects.all()
-    # return HttpResponse("<h1>Hello World from blog</h1>")
-    context={'name': n, 'posts': posts}
-    return render(request, 'blog/index.html', context)
 
+class PostsList(ObjListMixin, View):
+    model = Post
+    template = 'blog/index.html'
+    items_per_page = 3
+    name_page = 'page'
+    search_url = 'posts_list_url'
+#def post_list(request):
+    #n = 'Alex'
+    #posts = Post.objects.all()
+    #paginator = Paginator(posts, 1)
+    #
+    #
+    ##http://127.0.0.1:5000/blog/?page=1#
+    ##если запрос будет на несущ страницу переадресация на первую
+    #page_number = request.GET.get('page', 1)
+    #page = paginator.get_page(page_number)
+    #
+    #is_paginated = page.has_other_pages()
+    #
+    #if page.has_previous():
+    #    prev_url = '?page={}'.format(page.previous_page_number())
+    #else:
+    #    prev_url = ''
+    #
+    #if page.has_next():
+    #    next_url = '?page={}'.format(page.next_page_number())
+    #else:
+    #    next_url = ''
+    #
+    #last_page = paginator.count
+    #
+    #
+    ## return HttpResponse("<h1>Hello World from blog</h1>")
+    #context={
+    #    'name': n, 
+    #    'page_object': page,
+    #    'is_paginated': is_paginated,
+    #    'prev_url': prev_url,
+    #    'next_url': next_url,
+    #    'last_page': last_page,
+    #    }
+    #return render(request, 'blog/index.html', context=context)
+    #
 
 def tags_list(request):
     tags = Tag.objects.all()
